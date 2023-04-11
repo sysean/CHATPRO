@@ -1,0 +1,21 @@
+#root {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.mycontent {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}

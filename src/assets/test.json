@@ -1,0 +1,21 @@
+{
+    "id": "chatcmpl-74QuqSznfSkTVUgsKvrnuAgYljC2Z",
+    "object": "chat.completion",
+    "created": 1681291132,
+    "model": "gpt-3.5-turbo-0301",
+    "usage": {
+        "prompt_tokens": 15,
+        "completion_tokens": 364,
+        "total_tokens": 379
+    },
+    "choices": [
+        {
+            "message": {
+                "role": "assistant",
+                "content": "下面是一个简单的示例，演示如何使用Go语言编写一个HTTP接口：\n\n```go\npackage main\n\nimport (\n    \"encoding/json\"\n    \"log\"\n    \"net/http\"\n)\n\ntype Person struct {\n    Name    string `json:\"name\"`\n    Age     int    `json:\"age\"`\n    Address string `json:\"address\"`\n}\n\nfunc main() {\n    http.HandleFunc(\"/person\", handlePerson)\n    log.Fatal(http.ListenAndServe(\":8080\", nil))\n}\n\nfunc handlePerson(w http.ResponseWriter, r *http.Request) {\n    if r.Method != http.MethodGet {\n        http.Error(w, \"Method not allowed\", http.StatusMethodNotAllowed)\n        return\n    }\n\n    // Dummy data\n    person := Person{\n        Name:    \"John Doe\",\n        Age:     30,\n        Address: \"123 Main St\",\n    }\n\n    // Serialize to JSON\n    jsonBytes, err := json.Marshal(person)\n    if err != nil {\n        http.Error(w, err.Error(), http.StatusInternalServerError)\n        return\n    }\n\n    // Set content type and write response\n    w.Header().Set(\"Content-Type\", \"application/json\")\n    w.Write(jsonBytes)\n}\n```\n\n在上面的示例中，我们定义了一个名为`Person`的结构体，并在`handlePerson`函数中生成了一个人物对象。我们使用`json.Marshal`将该对象序列化为JSON格式，并将其作为响应发送回客户端。\n\n我们使用`http.HandleFunc`将`handlePerson`函数注册为处理`/person`路径的处理程序。最后，我们使用`http.ListenAndServe`启动HTTP服务器并开始监听传入的请求。"
+            },
+            "finish_reason": "stop",
+            "index": 0
+        }
+    ]
+}
