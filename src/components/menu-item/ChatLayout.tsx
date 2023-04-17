@@ -1,13 +1,12 @@
 import React from "react";
-import { useRef, useState, RefObject, useEffect } from "react";
+import { useState } from "react";
 import "./chat-layout.css";
 import { createParser } from 'eventsource-parser'
 import type { ParsedEvent, ReconnectInterval } from 'eventsource-parser'
 import MarkdownView from 'react-showdown';
 import { Card, Textarea, Button, Loading, Avatar } from '@nextui-org/react';
+import { OPENAI_API_KEY } from "../../vars";
 
-// const OPENAI_API_KEY = import.meta.env.OPENAI_API_KEY
-const OPENAI_API_KEY = "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"
 
 // 对话消息定义
 export interface ChatMessage {
@@ -78,7 +77,7 @@ const ChatLayout = () => {
                 text: msgs,
                 timestamp: new Date().toLocaleString(),
             };
-            
+
             setLoading(false);
             // 更新状态以显示对话消息
             setMessages((prevMessages) => [...prevMessages, chatMessage]);
@@ -135,7 +134,7 @@ const ChatLayout = () => {
                     maxRows={100}
                     rows={8}
                 />
-                <Button size="sm" color="gradient" onPress={handleUserInputSubmit} aria-label="send" css={{position: "absolute", right: "6px", bottom: "63px" }}>发送</Button>
+                <Button size="sm" color="gradient" onPress={handleUserInputSubmit} aria-label="send" css={{ position: "absolute", right: "6px", bottom: "63px" }}>发送</Button>
             </div>
         </div>
     );

@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import { NextUIProvider } from '@nextui-org/react'
 import MyNavbar from './components/Navbar'
-import { FaHome, FaHdd } from "react-icons/fa";
 import ChatLayout from './components/menu-item/ChatLayout';
+import { initKey } from './vars';
 
 const App: React.FC = () => {
   const [showContent, setShowContent] = useState(true);
@@ -11,6 +11,10 @@ const App: React.FC = () => {
   const handleToggle = () => {
     setShowContent((prev) => !prev);
   };
+
+  useEffect(() => {
+    initKey();
+  }, [])
 
   return (
     <NextUIProvider>
