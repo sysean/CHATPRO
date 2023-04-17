@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Navbar, Text, Link, Button } from "@nextui-org/react";
+import Logo from './Logo';
 import './navbar.css'
 
 function MyNavbar({ onToggle }) {
@@ -25,7 +26,8 @@ function MyNavbar({ onToggle }) {
 
     return (
         <Navbar isCompact isBordered variant="sticky">
-            <Navbar.Brand>
+            <Navbar.Brand css={{ alignItems: "center" }}>
+                {/* <Logo /> */}
                 <Text css={{
                     textGradient: "45deg, $blue600 -20%, $pink600 50%",
                 }} weight="bold">CHAT PRO</Text>
