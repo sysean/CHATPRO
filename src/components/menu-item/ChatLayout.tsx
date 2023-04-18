@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "./chat-layout.css";
 import { createParser } from 'eventsource-parser'
 import type { ParsedEvent, ReconnectInterval } from 'eventsource-parser'
@@ -17,16 +17,18 @@ export interface ChatMessage {
 }
 
 const ChatLayout = () => {
-    const [userInput, setUserInput] = useState<string>("");
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const textAreaRef = useRef<HTMLTextAreaElement>(null);
+    textAreaRef.current
 
-    const handleUserInputChange = (event: { target: { value: React.SetStateAction<string> } }) => {
-        setUserInput(event.target.value);
+    let userInputContent: string
+    const handleUserInputChange = () => {
+        userInputContent = textAreaRef?.current?.value??''
     };
 
     const handleUserInputSubmit = async () => {
-        if (!userInput.trim()) {
+        if (!userInputContent.trim()) {
             return;
         }
 
@@ -36,18 +38,18 @@ const ChatLayout = () => {
         const newUserMessage: ChatMessage = {
             id: String(messages.length),
             avatar: "https://dthezntil550i.cloudfront.net/p4/latest/p42102052243097410008650553/1280_960/12bc8bc0-2186-48fb-b432-6c011a559ec0.png",
-            text: userInput,
+            text: userInputContent,
             timestamp: new Date().toLocaleString(),
         };
         setMessages((prevMessages) => [...prevMessages, newUserMessage]);
 
         // 清空用户输入
-        setUserInput("");
+        textAreaRef.current!.value = '';
 
         try {
             const messages = [{
                 role: 'system',
-                content: userInput
+                content: userInputContent
             }]
 
             const initOptions = {
@@ -128,11 +130,11 @@ const ChatLayout = () => {
                     placeholder="输入消息，Ctrl+Enter发送"
                     fullWidth={true}
                     css={{ height: "300px", resize: "none", boxSizing: "border-box" }}
-                    value={userInput}
                     onChange={handleUserInputChange}
                     aria-label="textarea"
                     maxRows={100}
                     rows={8}
+                    ref={textAreaRef}
                 />
                 <Button size="sm" color="gradient" onPress={handleUserInputSubmit} aria-label="send" css={{ position: "absolute", right: "6px", bottom: "63px" }}>发送</Button>
             </div>
