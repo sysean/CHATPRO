@@ -24,7 +24,7 @@ const ChatLayout = () => {
 
     let userInputContent: string
     const handleUserInputChange = () => {
-        userInputContent = textAreaRef?.current?.value??''
+        userInputContent = textAreaRef?.current?.value ?? ''
     };
 
     const handleUserInputSubmit = async () => {
@@ -47,30 +47,7 @@ const ChatLayout = () => {
         textAreaRef.current!.value = '';
 
         try {
-            const messages = [{
-                role: 'system',
-                content: userInputContent
-            }]
-
-            const initOptions = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${OPENAI_API_KEY}`,
-                },
-                method: 'POST',
-                body: JSON.stringify({
-                    model: 'gpt-3.5-turbo',
-                    messages,
-                    temperature: 0.6,
-                    stream: false,
-                }),
-            }
-
-            console.log(initOptions)
-
-            const body = await myfetch(initOptions)
-
-            const msgs = body.choices[0].message.content || ''
+            const msgs = await myfetch(userInputContent)
 
             // 处理API响应，将其转换为ChatMessage格式
             const chatMessage: ChatMessage = {
@@ -192,16 +169,17 @@ const parseOpenAIStream = (rawResponse: Response) => {
     return new Response(stream)
 }
 
-const myfetch = async (initOptions: any) => {
+const OPENAI_PROXY_URL = 'https://chat-proxy-chatpro-backend-udpsvkkosi.us-west-1.fcapp.run/gen'
+const myfetch = async (msg: string) => {
     // 这里如果不加 await ，就不会等待 fetch 的结果，直接返回了
-    return await fetch(`https://api.openai.com/v1/chat/completions`, initOptions)
+    return await fetch(OPENAI_PROXY_URL + '?msg=' + msg)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error: ${response.status}`);
             }
-            return response.json();
-        }).then(jsonData => {
-            return jsonData
+            return response.text();
+        }).then(data => {
+            return data
         })
         .catch(error => {
             console.error('Error fetching data:', error);
