@@ -3,19 +3,21 @@ import './App.css'
 import { NextUIProvider } from '@nextui-org/react'
 import MyNavbar from './components/Navbar'
 import ChatLayout from './components/menu-item/ChatLayout';
+import ImageLayout from './components/menu-item/ImageLayout';
 
 const App: React.FC = () => {
-  const [showContent, setShowContent] = useState(true);
+  const [showChatLayout, setShowChatLayout] = useState(true);
 
-  const handleToggle = () => {
-    setShowContent((prev) => !prev);
-  };
+  const onMenuChange = (key: string) => {
+    console.log('xxxxx = ' + key)
+    setShowChatLayout(key === 'ai_chat')
+  }
 
   return (
     <NextUIProvider>
-      <MyNavbar onToggle={handleToggle} />
+      <MyNavbar onMenuChange={onMenuChange} />
       <div className="mycontent">
-        <ChatLayout />
+        {showChatLayout ? <ChatLayout /> : <ImageLayout />}
       </div>
     </NextUIProvider>
   )

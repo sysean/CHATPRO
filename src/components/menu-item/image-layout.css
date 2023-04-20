@@ -1,0 +1,33 @@
+.main-imagelayout {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main-imagelayout-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+.main-imagelayout-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .main-imagelayout {
+        flex-direction: column;
+    }
+
+    .main-imagelayout-left,
+    .main-imagelayout-right {
+        width: 100%;
+    }
+}

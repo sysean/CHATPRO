@@ -18,7 +18,6 @@ const ChatLayout = () => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
-    textAreaRef.current
 
     let userInputContent: string
     const handleUserInputChange = () => {
