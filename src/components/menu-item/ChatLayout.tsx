@@ -1,11 +1,9 @@
-import React from "react";
 import { useState, useRef } from "react";
 import "./chat-layout.css";
 import { createParser } from 'eventsource-parser'
 import type { ParsedEvent, ReconnectInterval } from 'eventsource-parser'
 import MarkdownView from 'react-showdown';
 import { Card, Textarea, Button, Loading, Avatar } from '@nextui-org/react';
-import { OPENAI_API_KEY } from "../../vars";
 
 
 // 对话消息定义
@@ -169,10 +167,19 @@ const parseOpenAIStream = (rawResponse: Response) => {
     return new Response(stream)
 }
 
-const OPENAI_PROXY_URL = 'https://chat-proxy-chatpro-backend-udpsvkkosi.us-west-1.fcapp.run/gen'
+const BASE_URL = 'https://chat-proxy-chatpro-backend-udpsvkkosi.us-west-1.fcapp.run'
+const OPENAI_PROXY_URL = `${BASE_URL}/gen`
 const myfetch = async (msg: string) => {
     // 这里如果不加 await ，就不会等待 fetch 的结果，直接返回了
-    return await fetch(OPENAI_PROXY_URL + '?msg=' + msg)
+    return await fetch(OPENAI_PROXY_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+            data: msg,
+        }),
+        headers: {
+            'Content-Type': 'application/json', // 千万别忘了这个，不然很难排查
+        }
+    })
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error: ${response.status}`);
