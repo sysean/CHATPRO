@@ -1,12 +1,13 @@
 // 这是一个根据输入的文字，请求AI接口，返回图片的react组件
 // 左侧是输入框，右侧是图片
-import { Textarea, Image, Button } from '@nextui-org/react';
-import { useRef } from 'react';
+import { Textarea, Image, Button, Loading } from '@nextui-org/react';
+import { useRef, useState } from 'react';
 import './image-layout.css';
 
 const ImageLayout = () => {
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
     const imgRef = useRef<HTMLImageElement>(null);
+    const [loading, setLoading] = useState<boolean>(false);
 
     let userInputContent: string
     const handleUserInputChange = () => {
@@ -17,9 +18,15 @@ const ImageLayout = () => {
         if (!userInputContent.trim()) {
             return;
         }
+        setLoading(true);
 
-        const imgUrl = await myfetch(userInputContent)
-        imgRef.current!.src = imgUrl
+        try {
+            imgRef.current!.src = await myfetch(userInputContent)
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            console.error(error)
+        }
     }
 
     return (
@@ -43,11 +50,12 @@ const ImageLayout = () => {
                 <Image
                     width={800}
                     height={800}
-                    src="src/assets/logo.png"
+                    src="public/logo.png"
                     alt="Default Image"
                     objectFit="cover"
                     ref={imgRef}
                 />
+                {loading && <Loading />}
             </div>
 
         </div>
